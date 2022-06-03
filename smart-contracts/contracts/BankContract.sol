@@ -10,6 +10,13 @@ contract Bank {
     mapping(address => uint256) public customerDebts;
     ZCoin public ZCoinContract;
 
+    event tokensBorrowed(address indexed owner, uint256 amount, string message);
+    event tokensDeposited(
+        address indexed owner,
+        uint256 amount,
+        string message
+    );
+
     constructor(address _zCoinAddress) {
         bankOwner = msg.sender;
         ZCoinContract = ZCoin(_zCoinAddress);
@@ -23,12 +30,16 @@ contract Bank {
         );
         ZCoinContract.transfer(msg.sender, value);
         customerDebts[msg.sender] += value;
+
+        emit tokensBorrowed(msg.sender, value, "Tokens borrowed.");
     }
 
     function depositMoney(uint256 value) public {
         require(value > 0, "You need to sell at least some tokens");
         ZCoinContract.transferFrom(msg.sender, address(this), value);
         customerDeposit[msg.sender] += value;
+
+        emit tokensDeposited(msg.sender, value, "Tokens deposited.");
     }
 
     function getCustomerDebts() external view returns (uint256) {
