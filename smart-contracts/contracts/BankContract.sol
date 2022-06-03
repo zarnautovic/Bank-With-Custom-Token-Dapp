@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "./ZCoinContract.sol";
-import "hardhat/console.sol";
 
 contract Bank {
     address public bankOwner;
